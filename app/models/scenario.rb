@@ -1,4 +1,4 @@
-class Scenario
+class Scenario < ActiveModelSerializers::Model
   include Her::Model
 
   attributes :title, :description, :order, :active

@@ -1,0 +1,27 @@
+%h1 Listing scenarios
+#scenarios
+  %table{'v-if': 'scenarios.length > 0'}
+    %thead
+      %tr
+        %th Title
+        %th Description
+        %th
+
+    %tbody
+      %tr{'v-for': 'scenario in scenarios'}
+        %td='{{ scenario.title }}'
+        %td='{{ scenario.description }}'
+      -#- @scenarios.each do |scenario|
+      -#  %tr
+      -#    %td= link_to "Show #{scenario.title}", scenario
+      -#    -#%td= link_to 'Edit', edit_scenario_path(scenario)
+      -#    %td= link_to 'Destroy', scenario, method: :delete, data: { confirm: 'Are you sure?' }
+
+-#%br
+-#
+-##hello
+-#  = "{{ message }}"
+-#  %app
+
+-#= link_to 'New Scenario', new_scenario_path
+= javascript_pack_tag 'scenarios'
