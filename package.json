@@ -3,6 +3,8 @@
   "private": true,
   "dependencies": {
     "@rails/webpacker": "^3.0.1",
+    "axios": "^0.16.2",
+    "hamljs": "^0.6.2",
     "vue": "^2.4.4",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4"

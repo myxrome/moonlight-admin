@@ -1,16 +1,14 @@
 import Vue from 'vue/dist/vue.esm'
+import ScenarioTable from './components/scenario_table.vue'
 
-const scenarios = new Vue({
-    el: '#scenarios',
-    data: {
-        scenarios: []
-    },
-    mounted: function() {
-        fetch('/scenarios.json').then(function(response) {
-            response.json().then(function(data) {
-                    this.scenarios = data;
-                }.bind(this)
-            )
-        }.bind(this))
-    }
+document.addEventListener('DOMContentLoaded', () => {
+
+    const scenarios = new Vue({
+        el: '#app',
+        components: {
+            ScenarioTable
+        }
+    });
+
 });
+
