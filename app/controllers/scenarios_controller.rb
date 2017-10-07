@@ -30,9 +30,9 @@ class ScenariosController < ApplicationController
   # PATCH/PUT /scenarios/1
   def update
     if @scenario.update(scenario_params)
-      redirect_to @scenario, notice: 'Scenario was successfully updated.'
+      render json: @scenario
     else
-      render :edit
+      render json: @scenario.errors, status: :unprocessable_entity
     end
   end
 
@@ -50,6 +50,6 @@ class ScenariosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def scenario_params
-      params.fetch(:scenario, {})
+      params.require(:scenario).permit(:title, :description, :order, :active)
     end
 end

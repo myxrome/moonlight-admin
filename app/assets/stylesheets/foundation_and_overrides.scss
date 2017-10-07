@@ -51,3 +51,12 @@
 //
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
+
+.switch.disabled {
+  opacity: 0.25;
+  pointer-events: none; // Prevents click events from working
+}
+
+.switch-container {
+  width: 5rem;
+}

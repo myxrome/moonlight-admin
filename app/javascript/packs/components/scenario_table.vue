@@ -1,26 +1,31 @@
 <template lang="haml">
-%table{'v-if': 'scenarios.length > 0'}
+%table
   %thead
     %tr
-      %th Title
-      %th Description
+      %td Active
+      %td Title
+      %td Description
   %tbody
-    %tr{'v-for': 'scenario in scenarios', ':key': 'scenario.id'}
-      %td='{{ scenario.title }}'
-      %td='{{ scenario.description }}'
+    %tr{is: 'scenario-line', 'v-for': 'scenario in scenarios', ':scenario': 'scenario', ':key': 'scenario.id'}
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
+import ScenarioLine from './scenario_line.vue'
 
 export default {
+  components: {
+    ScenarioLine
+  },
   computed: mapGetters({
     scenarios: 'list'
   }),
-  methods: mapActions([
-    'upload'
-  ]),
+  methods: {
+    ...mapActions([
+      'upload'
+    ])
+  },
   mounted: function() {
     this.upload();
   }
