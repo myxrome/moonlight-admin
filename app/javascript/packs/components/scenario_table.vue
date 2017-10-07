@@ -5,24 +5,24 @@
       %th Title
       %th Description
   %tbody
-    %tr{'v-for': 'scenario in scenarios'}
+    %tr{'v-for': 'scenario in scenarios', ':key': 'scenario.id'}
       %td='{{ scenario.title }}'
       %td='{{ scenario.description }}'
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  data: function() {
-    return {
-      scenarios: []
-    }
-  },
+  computed: mapGetters({
+    scenarios: 'list'
+  }),
+  methods: mapActions([
+    'upload'
+  ]),
   mounted: function() {
-    axios.get('/scenarios.json').then(function(response) {
-        this.scenarios = response.data;
-    }.bind(this))
+    this.upload();
   }
 }
 </script>
