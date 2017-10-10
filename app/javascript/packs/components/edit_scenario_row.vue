@@ -13,7 +13,7 @@ tr
       i.fi-save
   td
     a(href='#' @click.prevent='$emit("switch")')
-      i.fi-x-circle
+      i.fi-prohibited
 </template>
 
 <script>

@@ -10,6 +10,8 @@ tr
     a(href='#' @click.prevent='$emit("switch")')
       i.fi-pencil
   td
+    a(href='#' @click.prevent='goaway')
+      i.fi-x
 </template>
 
 <script>
@@ -21,13 +23,19 @@ export default {
   },
   methods: {
     ...mapActions([
-      'update'
+      'update',
+      'erase'
     ]),
     activate() {
       this.update({
         id: this.scenario.id,
         active: this.$refs.active.checked
       });
+    },
+    goaway() {
+      if (confirm('Delete this scenario?')) {
+        this.erase(this.scenario);
+      }
     },
   }
 }

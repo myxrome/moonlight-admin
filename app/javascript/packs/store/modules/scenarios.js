@@ -33,7 +33,17 @@ export default {
       }, error => {
 
       })
-    }
+    },
+    erase({dispatch, commit, state}, scenario) {
+      api.erase(scenario.id, () => {
+        commit(types.ERASE_SCENARIO, scenario.id);
+        state.scenarios.filter(function (item) {
+          return item.order > scenario.order
+        }).forEach(function (item) {
+          dispatch('update', {id: item.id, order: item.order - 1});
+        });
+      });
+    },
   },
   mutations: {
     [types.RECEIVE_SCENARIO_LIST](state, data) {
@@ -49,5 +59,10 @@ export default {
     [types.ADD_SCENARIO](state, data) {
       state.scenarios.push(data);
     },
+    [types.ERASE_SCENARIO](state, id) {
+      state.scenarios = state.scenarios.filter(function (item) {
+        return item.id !== id;
+      });
+    }
   }
 }
