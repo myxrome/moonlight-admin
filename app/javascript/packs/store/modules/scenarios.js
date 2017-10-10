@@ -19,11 +19,19 @@ export default {
         return element.id === id;
       });
 
-      commit(types.RECEIVE_SCENARIO, Object.assign({id: id}, data));
+      commit(types.UPDATE_SCENARIO, Object.assign({id: id}, data));
       api.update(id, data, updated => {
-        commit(types.RECEIVE_SCENARIO, updated);
+        commit(types.UPDATE_SCENARIO, updated);
       }, error => {
-        commit(types.RECEIVE_SCENARIO, saved);
+        commit(types.UPDATE_SCENARIO, saved);
+      })
+    },
+    create({commit, state}, data) {
+      data.order = state.scenarios.length + 1;
+      api.create(data, created => {
+        commit(types.ADD_SCENARIO, created);
+      }, error => {
+
       })
     }
   },
@@ -31,12 +39,15 @@ export default {
     [types.RECEIVE_SCENARIO_LIST](state, data) {
       state.scenarios = data;
     },
-    [types.RECEIVE_SCENARIO](state, data) {
+    [types.UPDATE_SCENARIO](state, data) {
       state.scenarios.forEach((element, index) => {
         if (element.id === data.id) {
           state.scenarios.splice(index, 1, Object.assign({}, state.scenarios[index], data));
         }
       })
-    }
+    },
+    [types.ADD_SCENARIO](state, data) {
+      state.scenarios.push(data);
+    },
   }
 }

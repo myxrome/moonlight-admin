@@ -21,9 +21,9 @@ class ScenariosController < ApplicationController
     @scenario = Scenario.new(scenario_params)
 
     if @scenario.save
-      redirect_to @scenario, notice: 'Scenario was successfully created.'
+      render json: @scenario, status: :created, location: @scenario
     else
-      render :new
+      render json: @scenario.errors, status: :unprocessable_entity
     end
   end
 
@@ -39,7 +39,7 @@ class ScenariosController < ApplicationController
   # DELETE /scenarios/1
   def destroy
     @scenario.destroy
-    redirect_to scenarios_url, notice: 'Scenario was successfully destroyed.'
+    head :no_content
   end
 
   private

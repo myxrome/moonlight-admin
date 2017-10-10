@@ -1,7 +1,7 @@
 <template lang="haml">
 %tr
   %td.scenario-row
-    .switch.tiny
+    .switch.tiny{':class': 'switchClass'}
       %input.switch-input{':id': 'scenario.id', ref: 'active', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate'}
       %label.switch-paddle{':for': 'scenario.id'}
   %td
@@ -23,9 +23,18 @@
     props: {
       scenario: Object
     },
+    computed: {
+      switchClass: function() {
+        console.log('is new call');
+        return {
+          disabled: this.scenario.id < 0
+        };
+      }
+    },
     methods: {
       ...mapActions([
-        'update'
+        'update',
+        'create'
       ]),
       activate() {
         this.update({
@@ -34,13 +43,23 @@
         });
       },
       save() {
-        this.update({
-          id: this.scenario.id,
-          title: this.$refs.title.value,
-          description: this.$refs.description.value
-        }).then(() => {
-          this.$emit("switch");
-        });
+        if (this.scenario.id < 0) {
+          this.create({
+            active: this.$refs.active.checked,
+            title: this.$refs.title.value,
+            description: this.$refs.description.value,
+          }).then(() => {
+            this.$emit("switch");
+          });
+        } else {
+          this.update({
+            id: this.scenario.id,
+            title: this.$refs.title.value,
+            description: this.$refs.description.value
+          }).then(() => {
+            this.$emit("switch");
+          });
+        }
       }
     }
   }
