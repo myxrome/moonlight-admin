@@ -2,13 +2,14 @@
 %tr
   %td.scenario-row
     .switch.tiny
-      %input.switch-input{':id': 'scenario.id', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate(scenario.id, $event.target.checked)'}
+      %input.switch-input{':id': 'scenario.id', ref: 'active', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate'}
       %label.switch-paddle{':for': 'scenario.id'}
   %td {{ scenario.title }}
-  %td {{ scenario.description }}
+  %td{style: 'white-space: pre-wrap'} {{ scenario.description }}
   %td
     %a{href: '#', '@click.prevent': '$emit("switch")'}
       %i.fi-pencil
+  %td
 </template>
 
 <script>
@@ -22,9 +23,12 @@ export default {
     ...mapActions([
       'update'
     ]),
-    activate(id, value) {
-      this.update({id: id, active: value});
-    }
+    activate() {
+      this.update({
+        id: this.scenario.id,
+        active: this.$refs.active.checked
+      });
+    },
   }
 }
 </script>

@@ -2,12 +2,15 @@
 %tr
   %td.scenario-row
     .switch.tiny
-      %input.switch-input{':id': 'scenario.id', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate(scenario.id, $event.target.checked)'}
+      %input.switch-input{':id': 'scenario.id', ref: 'active', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate'}
       %label.switch-paddle{':for': 'scenario.id'}
   %td
-    %input{name: 'title', ':value': 'scenario.title', type: 'text'}
+    %input{ref: 'title', type: 'text', ':value': 'scenario.title'}
   %td
-    %textarea{name: 'description', ':value': 'scenario.description', type: 'text', rows: '1'}
+    %textarea{ref: 'description', type: 'text', rows: '1', ':value': 'scenario.description'}
+  %td
+    %a{href: '#', '@click.prevent': 'save'}
+      %i.fi-save
   %td
     %a{href: '#', '@click.prevent': '$emit("switch")'}
       %i.fi-x-circle
@@ -24,8 +27,20 @@
       ...mapActions([
         'update'
       ]),
-      activate(id, value) {
-        this.update({id: id, active: value});
+      activate() {
+        this.update({
+          id: this.scenario.id,
+          active: this.$refs.active.checked
+        });
+      },
+      save() {
+        this.update({
+          id: this.scenario.id,
+          title: this.$refs.title.value,
+          description: this.$refs.description.value
+        }).then(() => {
+          this.$emit("switch");
+        });
       }
     }
   }

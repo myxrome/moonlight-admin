@@ -6,6 +6,7 @@
       %th{style: 'width: 20%'} Title
       %th Description
       %th.button-column
+      %th.button-column
   %tbody
     %tr{is: 'table-row', 'v-for': 'scenario in scenarios', ':scenario': 'scenario', ':key': 'scenario.id'}
 </template>
