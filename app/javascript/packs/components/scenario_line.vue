@@ -1,11 +1,14 @@
 <template lang="haml">
 %tr
-  %td.switch-container
+  %td.scenario-row
     .switch.tiny
       %input.switch-input{':id': 'scenario.id', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate(scenario.id, $event.target.checked)'}
       %label.switch-paddle{':for': 'scenario.id'}
   %td {{ scenario.title }}
   %td {{ scenario.description }}
+  %td
+    %a{href: '#', '@click.prevent': '$emit("switch")'}
+      %i.fi-pencil
 </template>
 
 <script>

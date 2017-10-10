@@ -57,6 +57,22 @@
   pointer-events: none; // Prevents click events from working
 }
 
-.switch-container {
+.switch-column {
   width: 5rem;
+}
+
+.button-column {
+  width: 3rem;
+}
+
+td > input, textarea {
+  margin: 0 !important;
+}
+
+i {
+  font-size: 1.5rem;
+}
+
+.scenario-row {
+  height: 5rem;
 }
