@@ -14,13 +14,13 @@ export default {
         commit(types.RECEIVE_SCENARIO_LIST, data);
       })
     },
-    update({commit, state}, data) {
+    update({commit, state}, {id, ...data}) {
       let saved = state.scenarios.find((element) => {
-        return element.id === data.id;
+        return element.id === id;
       });
 
-      commit(types.RECEIVE_SCENARIO, data);
-      api.update(data, updated => {
+      commit(types.RECEIVE_SCENARIO, Object.assign({id: id}, data));
+      api.update(id, data, updated => {
         commit(types.RECEIVE_SCENARIO, updated);
       }, error => {
         commit(types.RECEIVE_SCENARIO, saved);

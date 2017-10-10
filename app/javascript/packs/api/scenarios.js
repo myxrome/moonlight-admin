@@ -6,9 +6,9 @@ export default {
       callback(response.data)
     });
   },
-  update(data, callback, error) {
+  update(id, data, callback, error) {
     const token = document.querySelector("[name='csrf-token']").getAttribute("content");
-    axios.put('/scenarios/'+ data.id + '.json', data, {headers: {'x-csrf-token': token}}).then(function (response) {
+    axios.put('/scenarios/'+ id + '.json', data, {headers: {'x-csrf-token': token}}).then(function (response) {
       callback(response.data)
     }).catch(function (response) {
       console.log(response);
