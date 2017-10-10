@@ -1,18 +1,18 @@
-<template lang="haml">
+<template lang="pug">
 #scenarios
-  %table
-    %thead
-      %tr
-        %th.switch-column Active
-        %th{style: 'width: 20%'} Title
-        %th Description
-        %th.button-column
-        %th.button-column
-    %tbody
-      %tr{is: 'table-row', 'v-for': 'scenario in scenarios', ':scenario': 'scenario', ':key': 'scenario.id'}
-      %tr{is: 'edit-scenario-row', 'v-for': 'scenario in newScenarios', ':scenario': 'scenario', ':key': 'scenario.id', '@switch': 'newDone(scenario)'}
-  %a.float-right{href: '#', '@click.prevent': 'addNew'}
-    %i.fi-page-add
+  table
+    thead
+      tr
+        th.switch-column Active
+        th(style='width: 20%') Title
+        th Description
+        th.button-column
+        th.button-column
+    tbody
+      tr(is='table-row' v-for='scenario in scenarios' :scenario='scenario' :key='scenario.id')
+      tr(is='edit-scenario-row'  v-for='scenario in newScenarios' :scenario='scenario' :key='scenario.id' @switch='newDone(scenario)')
+  a.float-right(href='#' @click.prevent='addNew')
+    i.fi-page-add
 </template>
 
 <script>

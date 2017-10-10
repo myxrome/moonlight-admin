@@ -1,19 +1,19 @@
-<template lang="haml">
-%tr
-  %td.scenario-row
-    .switch.tiny{':class': 'switchClass'}
-      %input.switch-input{':id': 'scenario.id', ref: 'active', type: 'checkbox', ':checked': 'scenario.active', '@change': 'activate'}
-      %label.switch-paddle{':for': 'scenario.id'}
-  %td
-    %input{ref: 'title', type: 'text', ':value': 'scenario.title'}
-  %td
-    %textarea{ref: 'description', type: 'text', rows: '1', ':value': 'scenario.description'}
-  %td
-    %a{href: '#', '@click.prevent': 'save'}
-      %i.fi-save
-  %td
-    %a{href: '#', '@click.prevent': '$emit("switch")'}
-      %i.fi-x-circle
+<template lang="pug">
+tr
+  td.scenario-row
+    .switch.tiny(:class='{ disabled: this.scenario.id < 0 }')
+      input.switch-input(:id='scenario.id' ref='active' type='checkbox' :checked='scenario.active' @change='activate')
+      label.switch-paddle(:for='scenario.id')
+  td
+    input(ref='title' type='text' :value='scenario.title')
+  td
+    textarea(ref='description' type='text' rows='1' :value='scenario.description')
+  td
+    a(href='#' @click.prevent='save')
+      i.fi-save
+  td
+    a(href='#' @click.prevent='$emit("switch")')
+      i.fi-x-circle
 </template>
 
 <script>
@@ -22,14 +22,6 @@
   export default {
     props: {
       scenario: Object
-    },
-    computed: {
-      switchClass: function() {
-        console.log('is new call');
-        return {
-          disabled: this.scenario.id < 0
-        };
-      }
     },
     methods: {
       ...mapActions([

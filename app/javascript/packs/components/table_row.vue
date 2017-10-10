@@ -1,5 +1,5 @@
-<template lang="haml">
-%component{':is': 'currentView', '@switch': 'switchView', ':scenario': 'scenario'}
+<template lang="pug">
+component(:is='currentView' @switch='switchView' :scenario='scenario')
 </template>
 
 <script>
