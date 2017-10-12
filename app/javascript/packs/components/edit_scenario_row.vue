@@ -8,6 +8,8 @@ tr
     input(ref='title' type='text' :value='scenario.title')
   td
     textarea(ref='description' type='text' rows='1' :value='scenario.description')
+  td.handle
+    i.fi-arrow-up
   td
     a(href='#' @click.prevent='save')
       i.fi-save

@@ -8,8 +8,9 @@
         th Description
         th.button-column
         th.button-column
-    tbody
-      tr(is='table-row' v-for='scenario in scenarios' :scenario='scenario' :key='scenario.id')
+        th.button-column
+    draggable(v-model="scenarios" element="tbody" :options="{handle: '.handle', draggable: '.draggable'}" )
+      tr.draggable(is='table-row' v-for='scenario in scenarios' :scenario='scenario' :key='scenario.id')
       tr(is='edit-scenario-row'  v-for='scenario in newScenarios' :scenario='scenario' :key='scenario.id' @switch='newDone(scenario)')
   a.float-right(href='#' @click.prevent='addNew')
     i.fi-page-add
@@ -18,6 +19,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
+import draggable from 'vuedraggable'
 import EditScenarioRow from './edit_scenario_row.vue'
 import ScenarioLine from './scenario_line.vue'
 import TableRow from './table_row.vue'
@@ -28,10 +30,18 @@ export default {
       newScenarios: []
     }
   },
-  computed: mapGetters({
-    scenarios: 'list'
-  }),
+  computed: {
+    scenarios: {
+      get() {
+        return this.$store.getters.list
+      },
+      set(value) {
+        this.reorder(value);
+      }
+    }
+  },
   components: {
+    draggable,
     EditScenarioRow,
     'table-row': {
       extends: TableRow,
@@ -43,7 +53,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'upload'
+      'upload',
+      'reorder'
     ]),
     addNew() {
       this.newScenarios.push({
@@ -57,7 +68,7 @@ export default {
       this.newScenarios = this.newScenarios.filter(function (item) {
         return item.id !== scenario.id;
       })
-    }
+    },
   },
   mounted: function() {
     this.upload();

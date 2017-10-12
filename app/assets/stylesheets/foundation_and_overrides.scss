@@ -76,3 +76,8 @@ i {
 .scenario-row {
   height: 5rem;
 }
+
+.handle {
+  cursor: move;
+  cursor: -webkit-grabbing;
+}

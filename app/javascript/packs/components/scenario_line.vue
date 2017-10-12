@@ -6,6 +6,8 @@ tr
       label.switch-paddle(:for='scenario.id')
   td {{ scenario.title }}
   td(style='white-space: pre-wrap') {{ scenario.description }}
+  td.handle
+    i.fi-arrow-up
   td
     a(href='#' @click.prevent='$emit("switch")')
       i.fi-pencil
