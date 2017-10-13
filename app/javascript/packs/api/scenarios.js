@@ -1,35 +1,35 @@
 import axios from 'axios';
 
 export default {
-  upload(callback) {
-    axios.get('/scenarios.json').then(function(response) {
-      callback(response.data);
-    });
-  },
-  update(id, data, callback, error) {
-    const token = document.querySelector("[name='csrf-token']").getAttribute("content");
-    axios.put('/scenarios/'+ id + '.json', data, {headers: {'x-csrf-token': token}}).then(function (response) {
-      callback(response.data);
-    }).catch(function (response) {
-      console.log(response);
-      error(response.response.data)
-    })
-  },
-  create(data, callback, error) {
-    const token = document.querySelector("[name='csrf-token']").getAttribute("content");
-    axios.post('/scenarios.json', data, {headers: {'x-csrf-token': token}}).then(function (response) {
-      callback(response.data);
-    }).catch(function (response) {
-      console.log(response);
-      error(response.response.data)
-    })
-  },
-  erase(id, callback, error) {
-    const token = document.querySelector("[name='csrf-token']").getAttribute("content");
-    axios.delete('/scenarios/'+ id + '.json', {headers: {'x-csrf-token': token}}).then(function (response) {
-      callback();
-    }).catch(function (response) {
-      error();
-    })
-  }
+    upload(callback) {
+        return axios.get('/scenarios.json').then((response) => {
+            callback(response.data);
+        });
+    },
+    update(id, data, callback, error) {
+        const token = document.querySelector("[name='csrf-token']").getAttribute("content");
+        return axios.put('/scenarios/' + id + '.json', data, {headers: {'x-csrf-token': token}}).then((response) => {
+            callback(response.data);
+        }).catch((response) => {
+            console.log(response);
+            error(response.response.data)
+        })
+    },
+    create(data, callback, error) {
+        const token = document.querySelector("[name='csrf-token']").getAttribute("content");
+        return axios.post('/scenarios.json', data, {headers: {'x-csrf-token': token}}).then((response) => {
+            callback(response.data);
+        }).catch((response) => {
+            console.log(response);
+            error(response.response.data)
+        })
+    },
+    erase(id, callback, error) {
+        const token = document.querySelector("[name='csrf-token']").getAttribute("content");
+        return axios.delete('/scenarios/' + id + '.json', {headers: {'x-csrf-token': token}}).then((response) => {
+            callback();
+        }).catch((response) => {
+            error();
+        })
+    }
 }

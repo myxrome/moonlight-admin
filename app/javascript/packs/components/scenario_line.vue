@@ -7,7 +7,7 @@ tr
   td {{ scenario.title }}
   td(style='white-space: pre-wrap') {{ scenario.description }}
   td.handle
-    i.fi-arrow-up
+    img(:src='arrowsIcon')
   td
     a(href='#' @click.prevent='$emit("switch")')
       i.fi-pencil
@@ -17,28 +17,34 @@ tr
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
+import arrowsIcon from '../../images/arrows.png'
 
 export default {
-  props: {
-    scenario: Object
-  },
-  methods: {
-    ...mapActions([
-      'update',
-      'erase'
-    ]),
-    activate() {
-      this.update({
-        id: this.scenario.id,
-        active: this.$refs.active.checked
-      });
+    data: function () {
+        return {
+            arrowsIcon
+        };
     },
-    goaway() {
-      if (confirm('Delete this scenario?')) {
-        this.erase(this.scenario);
-      }
+    props: {
+        scenario: Object
     },
-  }
+    methods: {
+        ...mapActions([
+            'update',
+            'erase'
+        ]),
+        activate() {
+            this.update({
+                id: this.scenario.id,
+                active: this.$refs.active.checked
+            });
+        },
+        goaway() {
+            if (confirm('Delete this scenario?')) {
+                this.erase(this.scenario);
+            }
+        },
+    }
 }
 </script>

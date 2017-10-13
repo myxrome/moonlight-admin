@@ -1,15 +1,15 @@
 <template lang="pug">
 tr
   td.scenario-row
-    .switch.tiny(:class='{ disabled: this.scenario.id < 0 }')
+    .switch.tiny(v-if='this.scenario.id > 0')
       input.switch-input(:id='scenario.id' ref='active' type='checkbox' :checked='scenario.active' @change='activate')
       label.switch-paddle(:for='scenario.id')
   td
     input(ref='title' type='text' :value='scenario.title')
   td
     textarea(ref='description' type='text' rows='1' :value='scenario.description')
-  td.handle
-    i.fi-arrow-up
+  td(:class='{ handle: this.scenario.id > 0 }')
+    img(:src='arrowsIcon' v-if='this.scenario.id > 0')
   td
     a(href='#' @click.prevent='save')
       i.fi-save
@@ -19,42 +19,48 @@ tr
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+import {mapActions} from 'vuex'
+import arrowsIcon from '../../images/arrows.png'
 
-  export default {
+export default {
+    data: function () {
+        return {
+            arrowsIcon
+        };
+    },
     props: {
-      scenario: Object
+        scenario: Object
     },
     methods: {
-      ...mapActions([
-        'update',
-        'create'
-      ]),
-      activate() {
-        this.update({
-          id: this.scenario.id,
-          active: this.$refs.active.checked
-        });
-      },
-      save() {
-        if (this.scenario.id < 0) {
-          this.create({
-            active: this.$refs.active.checked,
-            title: this.$refs.title.value,
-            description: this.$refs.description.value,
-          }).then(() => {
-            this.$emit("switch");
-          });
-        } else {
-          this.update({
-            id: this.scenario.id,
-            title: this.$refs.title.value,
-            description: this.$refs.description.value
-          }).then(() => {
-            this.$emit("switch");
-          });
+        ...mapActions([
+            'update',
+            'create'
+        ]),
+        activate() {
+            this.update({
+                id: this.scenario.id,
+                active: this.$refs.active.checked
+            });
+        },
+        save() {
+            if (this.scenario.id < 0) {
+                this.create({
+                    active: false,
+                    title: this.$refs.title.value,
+                    description: this.$refs.description.value,
+                }).then(() => {
+                    this.$emit("switch");
+                });
+            } else {
+                this.update({
+                    id: this.scenario.id,
+                    title: this.$refs.title.value,
+                    description: this.$refs.description.value
+                }).then(() => {
+                    this.$emit("switch");
+                });
+            }
         }
-      }
     }
-  }
+}
 </script>

@@ -52,17 +52,16 @@
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
 
-.switch.disabled {
-  opacity: 0.25;
-  pointer-events: none; // Prevents click events from working
-}
-
 .switch-column {
   width: 5rem;
 }
 
 .button-column {
   width: 2.5rem;
+}
+
+.reorder-column {
+  width: 3.2rem;
 }
 
 td > input, textarea {
@@ -80,4 +79,12 @@ i {
 .handle {
   cursor: move;
   cursor: -webkit-grabbing;
+}
+
+.ghost {
+  opacity: 0;
+}
+
+.chosen {
+  font-weight: bold;
 }

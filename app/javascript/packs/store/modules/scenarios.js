@@ -3,7 +3,7 @@ import * as types from '../mutation_types'
 
 export default {
     state: {
-        scenarios: []
+        scenarios: [],
     },
     getters: {
         list: state => state.scenarios
@@ -15,16 +15,15 @@ export default {
             })
         },
         update({commit, state}, {id, ...data}) {
-            let saved = state.scenarios.find((element) => {
+            const saved = state.scenarios.find((element) => {
                 return element.id === id;
             });
 
-            commit(types.UPDATE_SCENARIO, Object.assign({id: id}, data));
-            api.update(id, data, updated => {
+            return api.update(id, data, updated => {
                 commit(types.UPDATE_SCENARIO, updated);
             }, error => {
                 commit(types.UPDATE_SCENARIO, saved);
-            })
+            });
         },
         create({commit, state}, data) {
             data.order = state.scenarios.length;
@@ -36,12 +35,16 @@ export default {
         },
         erase({dispatch, commit, state}, scenario) {
             api.erase(scenario.id, () => {
-                commit(types.ERASE_SCENARIO, scenario.id);
-                dispatch('reorder', state.scenarios);
+                commit(types.ERASE_SCENARIO, scenario.id)
+                dispatch('reorder');
             });
         },
-        reorder({dispatch}, scenarios) {
-            scenarios.forEach((item, index) => {
+        move({dispatch, commit, state}, oldIndex, newIndex) {
+            commit(types.MOVE_SCENARIO, oldIndex, newIndex);
+            dispatch('reorder');
+        },
+        reorder({dispatch, state}) {
+            state.scenarios.forEach((item, index) => {
                 if (item.order !== index) {
                     dispatch('update', {id: item.id, order: index});
                 }
@@ -49,6 +52,9 @@ export default {
         },
     },
     mutations: {
+        [types.MOVE_SCENARIO](state, {oldIndex, newIndex}) {
+            state.scenarios.splice(newIndex, 0, state.scenarios.splice(oldIndex, 1)[0]);
+        },
         [types.RECEIVE_SCENARIO_LIST](state, data) {
             data.forEach((element) => {
                 updateOrAdd(state, element);
@@ -64,7 +70,7 @@ export default {
             state.scenarios = state.scenarios.filter(function (item) {
                 return item.id !== id;
             });
-        }
+        },
     }
 }
 
@@ -78,7 +84,7 @@ function add(state, data) {
 }
 
 function updateOrAdd(state, data) {
-    let found = state.scenarios.some((element, index) => {
+    const found = state.scenarios.some((element, index) => {
         if (element.id === data.id) {
             const newItem = Object.assign({}, state.scenarios[index], data);
             if (index === newItem.order) {
