@@ -14,15 +14,10 @@ export default {
                 commit(types.RECEIVE_SCENARIO_LIST, data);
             })
         },
-        update({commit, state}, {id, ...data}) {
-            const saved = state.scenarios.find((element) => {
-                return element.id === id;
-            });
-
+        update({commit}, {id, ...data}) {
             return api.update(id, data, updated => {
                 commit(types.UPDATE_SCENARIO, updated);
             }, error => {
-                commit(types.UPDATE_SCENARIO, saved);
             });
         },
         create({commit, state}, data) {
@@ -30,7 +25,6 @@ export default {
             api.create(data, created => {
                 commit(types.ADD_SCENARIO, created);
             }, error => {
-
             })
         },
         erase({dispatch, commit, state}, scenario) {

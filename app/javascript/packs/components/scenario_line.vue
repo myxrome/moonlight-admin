@@ -6,19 +6,16 @@ tr
       label.switch-paddle(:for='scenario.id')
   td {{ scenario.title }}
   td(style='white-space: pre-wrap') {{ scenario.description }}
-  td.handle
-    img(:src='arrowsIcon')
   td
     a(href='#' @click.prevent='$emit("switch")')
       i.fi-pencil
   td
     a(href='#' @click.prevent='goaway')
-      i.fi-x
+      i.fi-trash
 </template>
 
 <script>
 import {mapActions} from 'vuex'
-import arrowsIcon from '../../images/arrows.png'
 
 export default {
     data: function () {

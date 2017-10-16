@@ -8,19 +8,16 @@ tr
     input(ref='title' type='text' :value='scenario.title')
   td
     textarea(ref='description' type='text' rows='1' :value='scenario.description')
-  td(:class='{ handle: this.scenario.id > 0 }')
-    img(:src='arrowsIcon' v-if='this.scenario.id > 0')
   td
     a(href='#' @click.prevent='save')
-      i.fi-save
+      i.fi-check
   td
     a(href='#' @click.prevent='$emit("switch")')
-      i.fi-prohibited
+      i.fi-x
 </template>
 
 <script>
 import {mapActions} from 'vuex'
-import arrowsIcon from '../../images/arrows.png'
 
 export default {
     data: function () {

@@ -6,14 +6,13 @@
         th.switch-column Active
         th(style='width: 20%') Title
         th Description
-        th.reorder-column
         th.button-column
         th.button-column
-    draggable(element="tbody" :options="{handle: '.handle', draggable: '.draggable', dragClass: 'ghost', chosenClass: 'chosen'}" @end='onEnd' )
+    draggable(element="tbody" :options="{filter: 'a, input, textarea, .switch', preventOnFilter: false, draggable: '.draggable', dragClass: 'ghost', chosenClass: 'chosen'}" @end='onEnd' )
       tr.draggable(is='table-row' v-for='scenario in scenarios' :scenario='scenario' :key='scenario.id')
       tr(is='edit-scenario-row'  v-for='scenario in newScenarios' :scenario='scenario' :key='scenario.id' @switch='newDone(scenario)')
   a.float-right(href='#' @click.prevent='addNew')
-    i.fi-page-add
+    i.fi-plus
 </template>
 
 <script>
