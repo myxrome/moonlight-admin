@@ -72,15 +72,15 @@ a > i {
   height: 5rem;
 }
 
-.draggable {
+.draggable-item {
   cursor: move;
   cursor: -webkit-grabbing;
 }
 
-.ghost {
+.draggable-ghost {
   opacity: 0;
 }
 
-.chosen {
+.draggable-chosen {
   font-weight: bold;
 }
