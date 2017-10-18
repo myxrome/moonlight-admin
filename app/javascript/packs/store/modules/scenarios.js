@@ -1,4 +1,4 @@
-import api from '../../api/scenarios'
+import api from '../../api/server'
 import * as types from '../mutation_types'
 
 export default {
@@ -14,26 +14,26 @@ export default {
         },
     },
     actions: {
-        upload({commit}) {
-            api.upload(data => {
+        fetch({commit}) {
+            api.fetch('scenarios', data => {
                 commit(types.RECEIVE_SCENARIO_LIST, data);
             })
         },
         update({commit}, {id, ...data}) {
-            return api.update(id, data, updated => {
+            return api.update('scenarios', id, data, updated => {
                 commit(types.UPDATE_SCENARIO, updated);
             }, error => {
             });
         },
         create({commit, state}, data) {
             data.order = state.scenarios.length;
-            api.create(data, created => {
+            api.create('scenarios', data, created => {
                 commit(types.ADD_SCENARIO, created);
             }, error => {
             })
         },
         erase({dispatch, commit, state}, scenario) {
-            api.erase(scenario.id, () => {
+            api.destroy('scenarios', scenario.id, () => {
                 commit(types.ERASE_SCENARIO, scenario.id)
                 dispatch('reorder');
             });

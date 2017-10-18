@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'upload',
+            'fetch',
             'move',
         ]),
         addNew() {
@@ -71,7 +71,7 @@ export default {
         },
     },
     created: function () {
-        this.upload();
+        this.fetch();
     },
 }
 </script>
