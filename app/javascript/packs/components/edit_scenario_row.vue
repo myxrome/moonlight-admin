@@ -40,7 +40,6 @@ export default {
         save() {
             if (this.scenario.id < 0) {
                 this.create({
-                    active: false,
                     title: this.$refs.title.value,
                     description: this.$refs.description.value,
                 }).then(() => {

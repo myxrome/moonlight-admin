@@ -27,7 +27,7 @@ export default {
     methods: {
         ...mapActions([
             'update',
-            'erase'
+            'destroy'
         ]),
         activate() {
             this.update({
@@ -37,7 +37,7 @@ export default {
         },
         goaway() {
             if (confirm('Delete this scenario?')) {
-                this.erase(this.scenario);
+                this.destroy(this.scenario.id);
             }
         },
     }

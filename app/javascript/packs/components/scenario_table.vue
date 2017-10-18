@@ -34,7 +34,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            scenarios: 'list'
+            scenarios: 'getAllScenarios'
         })
     },
     components: {
@@ -67,7 +67,7 @@ export default {
             })
         },
         onEnd(event) {
-            this.move(event);
+            this.move({from: event.oldIndex, to: event.newIndex});
         },
     },
     created: function () {
