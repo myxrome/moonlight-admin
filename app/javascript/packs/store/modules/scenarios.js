@@ -6,7 +6,12 @@ export default {
         scenarios: [],
     },
     getters: {
-        list: state => state.scenarios
+        list: state => state.scenarios,
+        getScenarioById: (state, getters) => (id) => {
+            return state.scenarios.find((item) => {
+                return item.id == id;
+            });
+        },
     },
     actions: {
         upload({commit}) {

@@ -5,6 +5,9 @@ tr
       input.switch-input(:id='scenario.id' ref='active' type='checkbox' :checked='scenario.active' @change='activate')
       label.switch-paddle(:for='scenario.id')
   td
+    router-link(:to='"/scenarios/" + scenario.id' v-if='this.scenario.id > 0')
+      i.fi-list-thumbnails
+  td
     input(ref='title' type='text' :value='scenario.title')
   td
     textarea(ref='description' type='text' rows='1' :value='scenario.description')
@@ -20,11 +23,6 @@ tr
 import {mapActions} from 'vuex'
 
 export default {
-    data: function () {
-        return {
-            arrowsIcon
-        };
-    },
     props: {
         scenario: Object
     },

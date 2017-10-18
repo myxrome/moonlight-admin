@@ -4,6 +4,9 @@ tr
     .switch.tiny
       input.switch-input(:id='scenario.id' ref='active' type='checkbox' :checked='scenario.active' @change='activate')
       label.switch-paddle(:for='scenario.id')
+  td
+    router-link(:to='"/scenarios/" + scenario.id')
+      i.fi-list-thumbnails
   td {{ scenario.title }}
   td(style='white-space: pre-wrap') {{ scenario.description }}
   td
@@ -18,11 +21,6 @@ tr
 import {mapActions} from 'vuex'
 
 export default {
-    data: function () {
-        return {
-            arrowsIcon
-        };
-    },
     props: {
         scenario: Object
     },

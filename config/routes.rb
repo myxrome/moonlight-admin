@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :scenarios, except: [:new, :edit]
+  root to: 'application#index'
+  resources :scenarios, except: [:new, :edit, :show]
 
 end
