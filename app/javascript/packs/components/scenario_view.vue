@@ -11,7 +11,7 @@
     export default {
         computed: {
             scenario: function () {
-                return this.$store.getters.getScenarioById(this.$route.params.id);
+                return this.$store.getters.getScenarioById(this.$route.params.id.parseInt());
             }
         }
     }

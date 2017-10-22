@@ -1,16 +1,16 @@
 <template lang="pug">
 tr
   td.scenario-row
-    .switch.tiny(v-if='this.scenario.id > 0')
-      input.switch-input(:id='scenario.id' ref='active' type='checkbox' :checked='scenario.active' @change='activate')
-      label.switch-paddle(:for='scenario.id')
+    .switch.tiny(v-if='this.scenario.data.id > 0')
+      input.switch-input(:id='scenario.data.id' ref='active' type='checkbox' :checked='scenario.data.active' @change='activate')
+      label.switch-paddle(:for='scenario.data.id')
   td
-    router-link(:to='"/scenarios/" + scenario.id' v-if='this.scenario.id > 0')
+    router-link(:to='"/scenarios/" + scenario.data.id' v-if='this.scenario.id > 0')
       i.fi-list-thumbnails
   td
-    input(ref='title' type='text' :value='scenario.title')
+    input(ref='title' type='text' :value='scenario.data.title')
   td
-    textarea(ref='description' type='text' rows='1' :value='scenario.description')
+    textarea(ref='description' type='text' rows='1' :value='scenario.data.description')
   td
     a(href='#' @click.prevent='save')
       i.fi-check
