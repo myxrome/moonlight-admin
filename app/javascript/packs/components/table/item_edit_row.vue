@@ -3,10 +3,10 @@
 tr
     slot
     td
-        a(href='#' @click.prevent='save')
+        a(href='#' @click.prevent='$emit("save", item.data.id)')
             i.fi-check
     td
-        a(href='#' @click.prevent='$emit("cancel")')
+        a(href='#' @click.prevent='$emit("cancel", item.data.id)')
             i.fi-x
 
 </template>
@@ -16,13 +16,6 @@ tr
 export default {
     props: {
         item: Object,
-    },
-    methods: {
-        save: function () {
-            this.$store.dispatch('updateScenarioFromCache', this.item.data.id).then(() => {
-                this.$emit('done');
-            });
-        }
     },
 }
 

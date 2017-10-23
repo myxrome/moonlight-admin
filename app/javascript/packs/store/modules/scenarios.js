@@ -3,15 +3,18 @@ import * as types from '../mutation_types'
 
 export default {
     state: {
-        all: [], // { data: {}, cache: {}, meta: {} }
+        // { data: {}, cache: {}, meta: {} }
+        all: [],
+        newItems: [],
     },
     getters: {
-        getAllScenarios: state => state.all,
+        getScenarios: state => state.all,
         getScenarioById: (state, getters) => (id) => {
             return state.all.find((item) => {
                 return item.data.id === id;
             });
         },
+        getNewScenarios: state => state.newItems,
     },
     actions: {
         fetch({commit}) {
@@ -39,6 +42,14 @@ export default {
             });
             if (Object.keys(item.cache).length > 0) {
                 dispatch('update', Object.assign({id: id}, item.cache));
+            }
+        },
+        createScenarioFromCache({dispatch, state}, id) {
+            const item = state.newItems.find((item) => {
+                return item.data.id === id;
+            });
+            if (Object.keys(item.cache).length > 0) {
+                dispatch('create', Object.assign(item.cache));
             }
         },
         move({dispatch, commit}, {from, to}) {
@@ -91,11 +102,29 @@ export default {
             item.meta.state = item.meta.state === 'show' ? 'edit' : 'show';
         },
         [types.UPDATE_SCENARIO_CACHE](state, {id, field, value}) {
-            const item = state.all.find((item) => {
+            const source = id < 0 ? state.newItems : state.all;
+            const item = source.find((item) => {
                 return item.data.id === id;
             });
             item.cache[field] = value;
-        }
+        },
+        [types.ADD_NEW_SCENARIO_ITEM](state) {
+            state.newItems.push({
+                data: {
+                    id: -Math.floor(Math.random() * 1000000 + 1),
+                    title: '',
+                    description: '',
+                    active: false,
+                },
+                cache: {},
+                meta: {state: 'edit'},
+            });
+        },
+        [types.DELETE_NEW_SCENARIO_ITEM](state, id) {
+            state.newItems = state.newItems.filter((item) => {
+                return item.data.id !== id;
+            })
+        },
     }
 }
 

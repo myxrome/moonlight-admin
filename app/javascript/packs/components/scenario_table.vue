@@ -26,6 +26,13 @@
                 input(type='text' :value='item.data.title' @keyup.stop='$store.commit("UPDATE_SCENARIO_CACHE", {id: item.data.id, field: "title", value: $event.target.value})')
             td
                 textarea(type='text' rows='1' :value='item.data.description' @keyup.stop='$store.commit("UPDATE_SCENARIO_CACHE", {id: item.data.id, field: "description", value: $event.target.value})')
+        template(slot='new-row-table' slot-scope='{ item }')
+            td
+            td
+            td
+                input(type='text' :value='item.cache.title' @keyup.stop='$store.commit("UPDATE_SCENARIO_CACHE", {id: item.data.id, field: "title", value: $event.target.value})')
+            td
+                textarea(type='text' rows='1' :value='item.cache.description' @keyup.stop='$store.commit("UPDATE_SCENARIO_CACHE", {id: item.data.id, field: "description", value: $event.target.value})')
 </template>
 
 <script>
