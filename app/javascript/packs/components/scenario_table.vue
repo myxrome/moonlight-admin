@@ -2,7 +2,7 @@
 #scenarios
     ul.breadcrumbs
         li.current Scenarios
-    table-template.scenario-table(:items='scenarios' :newItems='newScenarios' :options='{draggable: true}' @onDragEnd='onEnd')
+    table-template.scenario-table(:items='scenarios' :newItems='newScenarios' :options='{draggable: true}' @dragEnd='onDragEnd' @update='onUpdate' @switch='onSwitchScenarioState' @destroy='onDestroy' @addNew='onAddNew' @destroyNew='onDestroyNew' @createNew='onCreateNew')
         template(slot='thead')
             th.button-column
             th.switch-column Active
@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 import Draggable from 'vuedraggable'
 import EditScenarioRow from './edit_scenario_row.vue'
 import ScenarioLine from './scenario_line.vue'
@@ -47,7 +48,8 @@ import ValueSwitcher from './value_switcher.vue'
 import ItemShowRow from './table/item_show_row.vue'
 
 import TableTemplate from './table/table_template.vue'
-import scenarios from "../store/modules/scenarios";
+
+import * as types from '../store/mutation_types'
 
 export default {
     computed: {
@@ -79,7 +81,7 @@ export default {
                 return item.id !== scenario.id;
             })
         },
-        onEnd(event) {
+        onDragEnd(event) {
             this.move({from: event.oldIndex, to: event.newIndex});
         },
         onActive(scenario, value) {
@@ -89,6 +91,30 @@ export default {
                 active: value
             });
         },
+        onUpdate(id) {
+            this.$store.dispatch('updateScenarioFromCache', id).then(() => {
+                this.$store.commit('SWITCH_SCENARIO_LINE_STATE', id);
+            });
+        },
+        onSwitchScenarioState(id) {
+            this.$store.commit(types.SWITCH_SCENARIO_LINE_STATE, id);
+        },
+        onDestroy(id) {
+            if (confirm('Delete this scenario?')) {
+                this.$store.dispatch('destroy', id);
+            }
+        },
+        onAddNew() {
+            this.$store.commit('ADD_NEW_SCENARIO_ITEM');
+        },
+        onDestroyNew(id) {
+            this.$store.commit('DELETE_NEW_SCENARIO_ITEM', id);
+        },
+        onCreateNew(id) {
+            this.$store.dispatch('createScenarioFromCache', id).then(() => {
+                this.$store.commit('DELETE_NEW_SCENARIO_ITEM', id);
+            });
+        }
     },
     created: function () {
         this.fetch();

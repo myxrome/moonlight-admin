@@ -5,10 +5,10 @@
 </template>
 
 <script>
-export default {
-    props: {
-        item: Object,
-        value: false,
-    },
-}
+    export default {
+        props: {
+            item: Object,
+            value: false,
+        },
+    }
 </script>
