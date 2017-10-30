@@ -1,6 +1,10 @@
 <template lang="pug">
 
-    component(:is='current' :item='item' @save='(id) => $emit("save", id)' @destroy='(id) => $emit("destroy", id)' @cancel='(id) => $emit("switch", id)' @edit='(id) => $emit("switch", id)' @done='(id) => $emit("switch", id)')
+    component(:is='current' :item='item'
+                @edit='(id) => $emit("switch", id)'
+                @remove='(id) => $emit("remove", id)'
+                @save='(id) => $emit("save", id)'
+                @cancel='(id) => $emit("switch", id)')
         slot(name='show-row' v-if='current === "item-show-row"')
         slot(name='edit-row' v-if='current === "item-edit-row"')
 

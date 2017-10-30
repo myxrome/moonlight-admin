@@ -31,14 +31,14 @@
                             item: item,
                         },
                         on: {
-                            destroy: (id) => {
-                                this.$emit("destroy", id);
+                            remove: (id) => {
+                                this.$emit("removeStoredItem", id);
                             },
                             save: (id) => {
-                                this.$emit("update", id);
+                                this.$emit("saveStoredItem", id);
                             },
                             'switch': (id) => {
-                                this.$emit("switch", id);
+                                this.$emit("switchRow", id);
                             },
                         }
                     }, [
@@ -46,7 +46,7 @@
                             'template', {
                                 slot: 'show-row'
                             }, [
-                                this.$scopedSlots["show-row-table"]({
+                                this.$scopedSlots["show-row"]({
                                     item: item
                                 })
                             ]
@@ -55,7 +55,7 @@
                             'template', {
                                 slot: 'edit-row'
                             }, [
-                                this.$scopedSlots["edit-row-table"]({
+                                this.$scopedSlots["edit-row"]({
                                     item: item
                                 })
                             ]
@@ -72,14 +72,14 @@
                         },
                         on: {
                             cancel: (id) => {
-                                this.$emit("destroyNew", id);
+                                this.$emit("removeNewItem", id);
                             },
                             save: (id) => {
-                                this.$emit("createNew", id);
+                                this.$emit("saveNewItem", id);
                             },
                         }
                     }, [
-                        this.$scopedSlots["new-row-table"]({
+                        this.$scopedSlots["new-row"]({
                             item: item
                         })
                     ]
@@ -123,7 +123,7 @@
                     },
                     on: {
                         click: (event) => {
-                            this.$emit("addNew");
+                            this.$emit("addNewItem");
                             event.preventDefault();
                         }
                     }
