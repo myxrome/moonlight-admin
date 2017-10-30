@@ -30,8 +30,13 @@ export default {
             })
         },
         [actions.REQUEST_SCENARIOS]({commit}) {
-            api.fetch('scenarios', list => {
+            api.request('scenarios', list => {
                 commit(mutations.APPLY_STORED_SCENARIOS, list);
+            })
+        },
+        [actions.REQUEST_SCENARIO]({commit}, id) {
+            api.request(`scenarios/${id}`, item => {
+                commit(mutations.UPDATE_STORED_SCENARIO, item);
             })
         },
         [actions.UPDATE_SCENARIO]({commit}, {id, ...data}) {

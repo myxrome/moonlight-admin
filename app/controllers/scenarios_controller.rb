@@ -1,10 +1,15 @@
 class ScenariosController < ApplicationController
-  before_action :set_scenario, only: [:update, :destroy]
+  before_action :set_scenario, only: [:show, :update, :destroy]
 
   # GET /scenarios
   def index
     @scenarios = Scenario.all
     render json: @scenarios
+  end
+
+  # GET /scenarios/1
+  def show
+    render json: @scenario
   end
 
   # POST /scenarios

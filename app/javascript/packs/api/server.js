@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default {
-    fetch(path, callback, error) {
+    request(path, callback, error) {
         return axios.get('/' + path + '.json').then((response) => {
             callback(response.data);
         }).catch((response) => {

@@ -46,8 +46,6 @@
     import * as mutations from '../../store/mutation_types'
     import * as actions from '../../store/action_types'
     import {mapGetters} from 'vuex'
-    import {mapActions} from 'vuex'
-    import {mapMutations} from 'vuex'
 
     import TableTemplate from '../common/table/table_template.vue'
     import ValueSwitcher from '../common/value_switcher.vue'
