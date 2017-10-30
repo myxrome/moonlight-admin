@@ -2,7 +2,7 @@
 #scenarios
     ul.breadcrumbs
         li.current Scenarios
-    table-template.scenario-table(:items='scenarios' :newItems='newScenarios' :options='{draggable: true}' @dragEnd='onDragEnd' @update='onUpdate' @switch='onSwitchScenarioState' @destroy='onDestroy' @addNew='onAddNew' @destroyNew='onDestroyNew' @createNew='onCreateNew')
+    table-template.scenario-table(:storedItems='scenarios' :newItems='newScenarios' :draggable='true' @dragEnd='onDragEnd' @update='onUpdate' @switch='onSwitchScenarioState' @destroy='onDestroy' @addNew='onAddNew' @destroyNew='onDestroyNew' @createNew='onCreateNew')
         template(slot='thead')
             th.button-column
             th.switch-column Active
@@ -36,20 +36,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
-import { mapMutations } from 'vuex'
-import Draggable from 'vuedraggable'
-import EditScenarioRow from './edit_scenario_row.vue'
-import ScenarioLine from './scenario_line.vue'
-import TableRow from './table_row.vue'
+    import * as types from '../../store/mutation_types'
+    import { mapGetters } from 'vuex'
+    import { mapActions } from 'vuex'
+    import { mapMutations } from 'vuex'
 
-import ValueSwitcher from './value_switcher.vue'
-import ItemShowRow from './table/item_show_row.vue'
-
-import TableTemplate from './table/table_template.vue'
-
-import * as types from '../store/mutation_types'
+    import TableTemplate from '../common/table/table_template.vue'
+    import ValueSwitcher from '../common/value_switcher.vue'
 
 export default {
     computed: {

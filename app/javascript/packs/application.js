@@ -14,8 +14,8 @@ import VueRouter from 'vue-router'
 
 import store from './store/store'
 
-import ScenarioTable from './components/scenario_table.vue'
-import ScenarioView from './components/scenario_view.vue'
+import ScenarioTable from './components/scenario/scenario_table.vue'
+import ScenarioView from './components/scenario/scenario_view.vue'
 
 Vue.use(VueRouter);
 
