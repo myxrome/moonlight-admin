@@ -1,6 +1,7 @@
 import api from '../../api/server'
 import * as mutations from '../mutation_types'
 import * as actions from '../action_types'
+import * as helper from '../../common/store_helper'
 
 export default {
     state: {
@@ -23,7 +24,7 @@ export default {
         },
     },
     actions: {
-        [actions.CREATE_SCENARIO]({commit, state}, data) {
+        [actions.CREATE_SCENARIO]({commit}, data) {
             api.create('scenarios', data, created => {
                 commit(mutations.ADD_STORED_SCENARIO, created);
             }, error => {
@@ -66,17 +67,17 @@ export default {
     mutations: {
         [mutations.APPLY_STORED_SCENARIOS](state, list) {
             list.forEach((data) => {
-                if (!updateStoredScenario(state, data)) {
-                    addStoredScenario(state, data);
+                if (!helper.updateStoredOrderedItem(state.storedItems, data)) {
+                    helper.addStoredOrderedItem(state.storedItems, data);
                 }
             });
         },
         [mutations.ADD_STORED_SCENARIO](state, data) {
-            addStoredScenario(state, data);
+            helper.addStoredOrderedItem(state.storedItems, data);
         },
         [mutations.UPDATE_STORED_SCENARIO](state, data) {
-            if (!updateStoredScenario(state, data)) {
-                addStoredScenario(state, data);
+            if (!helper.updateStoredOrderedItem(state.storedItems, data)) {
+                helper.addStoredOrderedItem(state.storedItems, data);
             }
         },
         [mutations.MOVE_STORED_SCENARIO](state, {from, to}) {
@@ -119,35 +120,4 @@ export default {
             item.cache = data;
         },
     }
-}
-
-function addStoredScenario(state, scenario) {
-    let index = state.storedItems.findIndex((item) => {
-        return scenario.order < item.data.order;
-    });
-    index = index < 0 ? state.storedItems.length : index;
-    let created = {
-        data: scenario,
-        cache: {},
-        meta: { state: 'show' },
-    };
-    state.storedItems.insert(index, created);
-}
-
-function updateStoredScenario(state, scenario) {
-    return state.storedItems.some((item, index) => {
-        if (item.data.id === scenario.id) {
-            const updated = {
-                data: Object.assign({}, item.data, scenario),
-                cache: Object.assign({}, item.cache),
-                meta: Object.assign({}, item.meta),
-            };
-            state.storedItems.replace(index, updated);
-            if (index !== updated.data.order) {
-                state.storedItems.move(index, item.data.order);
-            }
-            return true;
-        }
-        return false;
-    });
 }

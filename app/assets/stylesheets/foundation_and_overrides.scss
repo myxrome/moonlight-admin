@@ -51,36 +51,3 @@
 //
 // @include motion-ui-transitions;
 // @include motion-ui-animations;
-
-.switch-column {
-  width: 5rem;
-}
-
-.button-column {
-  width: 2.5rem;
-}
-
-td > input, textarea {
-  margin: 0 !important;
-}
-
-a > i {
-  font-size: 1.5rem;
-}
-
-.scenario-table td {
-  height: 5rem;
-}
-
-.draggable-item {
-  cursor: move;
-  cursor: -webkit-grabbing;
-}
-
-.draggable-ghost {
-  opacity: 0;
-}
-
-.draggable-chosen {
-  font-weight: bold;
-}

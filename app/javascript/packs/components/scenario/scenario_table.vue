@@ -30,16 +30,16 @@
             td
                 value-switcher(:item='item.data' :value='item.data.active' @switch='onSwitchStoredScenarioActive')
             td
-                input(type='text' :value='item.data.title' @keyup.stop='onUpdateStoredScenarioCache(item.data.id, "title", $event.target.value)')
+                input(type='text' :value='item.data.title' @change='onUpdateStoredScenarioCache(item.data.id, "title", $event.target.value)')
             td
-                textarea(type='text' rows='1' :value='item.data.description' @keyup.stop='onUpdateStoredScenarioCache(item.data.id, "description", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.data.description' @change='onUpdateStoredScenarioCache(item.data.id, "description", $event.target.value)')
         template(slot='new-row' slot-scope='{ item }')
             td
             td
             td
-                input(type='text' :value='item.cache.title' @keyup.stop='onUpdateNewScenarioCache(item.data.id, "title", $event.target.value)')
+                input(type='text' :value='item.cache.title' @change='onUpdateNewScenarioCache(item.data.id, "title", $event.target.value)')
             td
-                textarea(type='text' rows='1' :value='item.cache.description' @keyup.stop='onUpdateNewScenarioCache(item.data.id, "description", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.cache.description' @change='onUpdateNewScenarioCache(item.data.id, "description", $event.target.value)')
 </template>
 
 <script>
@@ -67,6 +67,10 @@
             },
             onSaveStoredScenario(id) {
                 const item = this.$store.getters.getStoredScenarioById(id);
+                if (Object.keys(item.cache).length === 0) {
+                    this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
+                    return;
+                }
                 this.$store.dispatch(actions.UPDATE_SCENARIO,
                                      Object.assign({id: id}, item.cache)).then(() => {
                     this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
