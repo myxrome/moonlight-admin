@@ -14,12 +14,14 @@ import store from './store/store'
 
 import ScenarioTable from './components/scenario/scenario_table.vue'
 import ScenarioView from './components/scenario/scenario_view.vue'
+import StageView from './components/stage/stage_view.vue'
 
 Vue.use(VueRouter);
 
 const routes = [
     { path: '/', component: ScenarioTable },
     { path: '/scenarios/:id', component: ScenarioView },
+    { path: '/stages/:id', component: StageView },
 ];
 
 const router = new VueRouter({
