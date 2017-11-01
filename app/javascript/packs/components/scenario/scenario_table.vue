@@ -2,7 +2,7 @@
 #scenarios
     ul.breadcrumbs
         li.current Scenarios
-    table-template.scenario-table(:stored='storedScenarios' :added='newScenarios' :draggable='true'
+    table-template.scenario-table(:stored='stored' :added='added' :draggable='true'
                                     @switchRow='onSwitchScenarioRow'
                                     @saveStoredItem='onSaveStoredScenario'
                                     @removeStoredItem='onRemoveStoredScenario'
@@ -45,17 +45,20 @@
 <script>
     import * as mutations from '../../store/mutation_types'
     import * as actions from '../../store/action_types'
-    import {mapGetters} from 'vuex'
 
     import TableTemplate from '../common/table/table_template.vue'
     import ValueSwitcher from '../common/value_switcher.vue'
 
     export default {
         computed: {
-            ...mapGetters({
-                storedScenarios: 'getStoredScenarios',
-                newScenarios: 'getNewScenarios',
-            })
+            stored: function () {
+                return this.$store.state.scenarios.stored.
+                    map(item => item).
+                    sort((left, right) => left.data.order - right.data.order);
+            },
+            added: function () {
+                return this.$store.state.scenarios.added;
+            },
         },
         components: {
             TableTemplate,
@@ -66,20 +69,27 @@
                 this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
             },
             onSaveStoredScenario(id) {
-                const item = this.$store.getters.getStoredScenarioById(id);
-                if (Object.keys(item.cache).length === 0) {
-                    this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
-                    return;
+                const item = this.stored.find(item => item.data.id === id);
+                if (Object.keys(item.cache).length !== 0) {
+                    this.$store.dispatch(actions.UPDATE_SCENARIO,
+                        Object.assign({id: id}, item.cache)).then(() => {
+                    });
                 }
-                this.$store.dispatch(actions.UPDATE_SCENARIO,
-                                     Object.assign({id: id}, item.cache)).then(() => {
-                    this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
-                });
+                this.$store.commit(mutations.SWITCH_STORED_SCENARIO_STATE, id);
             },
             onRemoveStoredScenario(id) {
-                const item = this.$store.getters.getStoredScenarioById(id);
+                const item = this.stored.find(item => item.data.id === id);
                 if (confirm(`Delete "${item.data.title}" scenario?`)) {
                     this.$store.dispatch(actions.DESTROY_SCENARIO, id);
+                    this.stored.
+                        filter(el => el.data.order > item.data.order).
+                        forEach(el =>
+                            this.$store.dispatch(
+                                actions.UPDATE_SCENARIO,
+                                {
+                                    id: el.data.id,
+                                    order: el.data.order - 1
+                                }))
                 }
             },
             onAddNewScenario() {
@@ -91,9 +101,9 @@
                 });
             },
             onSaveNewScenario(id) {
-                const item = this.$store.getters.getNewScenarioById(id);
+                const item = this.added.find(item => item.data.id === id);
                 this.$store.dispatch(actions.CREATE_SCENARIO,
-                    Object.assign({order: this.storedScenarios.length, active: false}, item.cache)).then(() => {
+                    Object.assign({order: this.stored.length, active: false}, item.cache)).then(() => {
                     this.$store.commit(mutations.REMOVE_NEW_SCENARIO, id);
                 });
             },
@@ -101,7 +111,16 @@
                 this.$store.commit(mutations.REMOVE_NEW_SCENARIO, id);
             },
             onDragEnd(event) {
-                this.$store.dispatch(actions.MOVE_SCENARIO, {from: event.oldIndex, to: event.newIndex});
+                let item = this.stored[event.oldIndex];
+                this.$store.dispatch(actions.UPDATE_SCENARIO, {id: item.data.id, order: event.newIndex});
+
+                let index = event.newIndex;
+                const step = Math.sign(event.oldIndex - event.newIndex);
+                while (index !== event.oldIndex) {
+                    let item = this.stored[index];
+                    index += step;
+                    this.$store.dispatch(actions.UPDATE_SCENARIO, {id: item.data.id, order: index});
+                }
             },
             onSwitchStoredScenarioActive(scenario, value) {
                 this.$store.dispatch(actions.UPDATE_SCENARIO, {
@@ -110,13 +129,13 @@
                 });
             },
             onUpdateStoredScenarioCache(id, field, value) {
-                const item = this.$store.getters.getStoredScenarioById(id);
+                const item = this.stored.find(item => item.data.id === id);
                 let data = Object.assign({id: id}, item.cache);
                 data[field] = value;
                 this.$store.commit(mutations.UPDATE_STORED_SCENARIO_CACHE, data);
             },
             onUpdateNewScenarioCache(id, field, value) {
-                const item = this.$store.getters.getNewScenarioById(id);
+                const item = this.added.find(item => item.data.id === id);
                 let data = Object.assign({id: id}, item.cache);
                 data[field] = value;
                 this.$store.commit(mutations.UPDATE_NEW_SCENARIO_CACHE, data);

@@ -16,7 +16,7 @@
     export default {
         computed: {
             scenario: function() {
-                return this.$store.getters.getStoredScenarioById(Number.parseInt(this.$route.params.id));
+                return this.$store.state.scenarios.stored.find(item => item.data.id === Number.parseInt(this.$route.params.id));
             }
         },
         components: {
