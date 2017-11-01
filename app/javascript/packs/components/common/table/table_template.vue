@@ -6,8 +6,8 @@
 
     export default {
         props: {
-            storedItems: Array,
-            newItems: Array,
+            stored: Array,
+            added: Array,
             draggable: {
                 type: Boolean,
                 'default': false,
@@ -20,7 +20,7 @@
             ItemEditRow,
         },
         render: function (createElement) {
-            const storedItemRows = this.storedItems.map((item) => {
+            const storedItemRows = this.stored.map((item) => {
                 return createElement(
                     SwitchRow, {
                         'class': { 
@@ -46,7 +46,7 @@
                             'template', {
                                 slot: 'show-row'
                             }, [
-                                this.$scopedSlots["show-row"]({
+                                this.$scopedSlots["stored-show-row"]({
                                     item: item
                                 })
                             ]
@@ -55,7 +55,7 @@
                             'template', {
                                 slot: 'edit-row'
                             }, [
-                                this.$scopedSlots["edit-row"]({
+                                this.$scopedSlots["stored-edit-row"]({
                                     item: item
                                 })
                             ]
@@ -63,7 +63,7 @@
                     ]
                 );
             });
-            const newItemRows = this.newItems.map((item) => {
+            const newItemRows = this.added.map((item) => {
                 return createElement(
                     ItemEditRow, {
                         key: item.data.id,
@@ -79,7 +79,7 @@
                             },
                         }
                     }, [
-                        this.$scopedSlots["new-row"]({
+                        this.$scopedSlots["added-row"]({
                             item: item
                         })
                     ]

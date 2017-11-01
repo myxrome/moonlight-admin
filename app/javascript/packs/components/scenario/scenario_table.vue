@@ -2,7 +2,7 @@
 #scenarios
     ul.breadcrumbs
         li.current Scenarios
-    table-template.scenario-table(:storedItems='storedScenarios' :newItems='newScenarios' :draggable='true'
+    table-template.scenario-table(:stored='storedScenarios' :added='newScenarios' :draggable='true'
                                     @switchRow='onSwitchScenarioRow'
                                     @saveStoredItem='onSaveStoredScenario'
                                     @removeStoredItem='onRemoveStoredScenario'
@@ -15,7 +15,7 @@
             th.switch-column Active
             th(style='width: 20%') Title
             th Description
-        template(slot='show-row' slot-scope='{ item }')
+        template(slot='stored-show-row' slot-scope='{ item }')
             td
                 router-link(:to='"/scenarios/" + item.data.id')
                     i.fi-list-thumbnails
@@ -23,7 +23,7 @@
                 value-switcher(:item='item.data' :value='item.data.active' @switch='onSwitchStoredScenarioActive')
             td {{ item.data.title }}
             td(style='white-space: pre-wrap') {{ item.data.description }}
-        template(slot='edit-row' slot-scope='{ item }')
+        template(slot='stored-edit-row' slot-scope='{ item }')
             td
                 router-link(:to='"/scenarios/" + item.data.id')
                     i.fi-list-thumbnails
@@ -33,7 +33,7 @@
                 input(type='text' :value='item.data.title' @change='onUpdateStoredScenarioCache(item.data.id, "title", $event.target.value)')
             td
                 textarea(type='text' rows='1' :value='item.data.description' @change='onUpdateStoredScenarioCache(item.data.id, "description", $event.target.value)')
-        template(slot='new-row' slot-scope='{ item }')
+        template(slot='added-row' slot-scope='{ item }')
             td
             td
             td

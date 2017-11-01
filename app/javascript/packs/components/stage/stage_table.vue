@@ -1,5 +1,5 @@
 <template lang="pug">
-    table-template.scenario-table(:storedItems='storedStages' :newItems='newStages' :draggable='true'
+    table-template.scenario-table(:stored='stored' :added='added' :draggable='true'
                                     @switchRow='onSwitchStageRow'
                                     @saveStoredItem='onSaveStoredStage'
                                     @removeStoredItem='onRemoveStoredStage'
@@ -12,14 +12,14 @@
             th(style='width: 20%')
             th(style='width: 20%') Duration
             th
-        template(slot='show-row' slot-scope='{ item }')
+        template(slot='stored-show-row' slot-scope='{ item }')
             td
                 router-link(:to='"/stages/" + item.data.id')
                     i.fi-list-thumbnails
             td
             td {{ item.data.duration }}
             td
-        template(slot='edit-row' slot-scope='{ item }')
+        template(slot='stored-edit-row' slot-scope='{ item }')
             td
                 router-link(:to='"/stages/" + item.data.id')
                     i.fi-list-thumbnails
@@ -27,7 +27,7 @@
             td
                 input(type='number' :value='item.data.duration' @change='onUpdateStoredStageCache(item.data.id, "duration", $event.target.value)')
             td
-        template(slot='new-row' slot-scope='{ item }')
+        template(slot='added-row' slot-scope='{ item }')
             td
             td
             td
@@ -50,13 +50,13 @@
             }
         },
         computed: {
-            storedStages: function () {
-                return this.$store.state.stages.storedStages.
+            stored: function () {
+                return this.$store.state.stages.stored.
                     filter(item => item.data.scenario_id === this.scenarioId).
                     sort((left, right) => left.data.order - right.data.order);
             },
-            newStages: function () {
-                return this.$store.state.stages.newStages.
+            added: function () {
+                return this.$store.state.stages.added.
                     filter(item => item.data.scenario_id === this.scenarioId);
             },
         },
@@ -68,7 +68,7 @@
                 this.$store.commit(mutations.SWITCH_STORED_STAGE_STATE, id);
             },
             onSaveStoredStage(id) {
-                const item = this.storedStages.find(item => item.data.id === id);
+                const item = this.stored.find(item => item.data.id === id);
                 if (Object.keys(item.cache).length !== 0) {
                     this.$store.dispatch(actions.UPDATE_STAGE,
                         Object.assign({id: id}, item.cache)).then(() => {
@@ -77,10 +77,10 @@
                 this.$store.commit(mutations.SWITCH_STORED_STAGE_STATE, id);
             },
             onRemoveStoredStage(id) {
-                const item = this.storedStages.find(item => item.data.id === id);
+                const item = this.stored.find(item => item.data.id === id);
                 if (confirm(`Delete "${item.data.order + 1}" stage?`)) {
                     this.$store.dispatch(actions.DESTROY_STAGE, id);
-                    this.storedStages.
+                    this.stored.
                         filter(el => el.data.order > item.data.order).
                         forEach(el =>
                             this.$store.dispatch(
@@ -100,9 +100,9 @@
                 });
             },
             onSaveNewStage(id) {
-                const item = this.newStages.find(item => item.data.id === id);
+                const item = this.added.find(item => item.data.id === id);
                 this.$store.dispatch(actions.CREATE_STAGE,
-                    Object.assign({order: this.storedStages.length, scenario_id: this.scenarioId}, item.cache)).then(() => {
+                    Object.assign({order: this.stored.length, scenario_id: this.scenarioId}, item.cache)).then(() => {
                     this.$store.commit(mutations.REMOVE_NEW_STAGE, id);
                 });
             },
@@ -110,25 +110,25 @@
                 this.$store.commit(mutations.REMOVE_NEW_STAGE, id);
             },
             onDragEnd(event) {
-                let item = this.storedStages[event.oldIndex];
+                let item = this.stored[event.oldIndex];
                 this.$store.dispatch(actions.UPDATE_STAGE, {id: item.data.id, order: event.newIndex});
 
                 let index = event.newIndex;
                 const step = Math.sign(event.oldIndex - event.newIndex);
                 while (index !== event.oldIndex) {
-                    let item = this.storedStages[index];
+                    let item = this.stored[index];
                     index += step;
                     this.$store.dispatch(actions.UPDATE_STAGE, {id: item.data.id, order: index});
                 }
             },
             onUpdateStoredStageCache(id, field, value) {
-                const item = this.storedStages.find(item => item.data.id === id);
+                const item = this.stored.find(item => item.data.id === id);
                 let data = Object.assign({id: id}, item.cache);
                 data[field] = value;
                 this.$store.commit(mutations.UPDATE_STORED_STAGE_CACHE, data);
             },
             onUpdateNewStageCache(id, field, value) {
-                const item = this.newStages.find(item => item.data.id === id);
+                const item = this.added.find(item => item.data.id === id);
                 let data = Object.assign({id: id}, item.cache);
                 data[field] = value;
                 this.$store.commit(mutations.UPDATE_NEW_STAGE_CACHE, data);

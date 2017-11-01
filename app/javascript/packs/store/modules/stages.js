@@ -5,8 +5,8 @@ import * as actions from '../action_types'
 export default {
     state: {
         // { data: {}, cache: {}, meta: {} }
-        storedStages: [],
-        newStages: [],
+        stored: [],
+        added: [],
     },
     actions: {
         [actions.CREATE_STAGE]({commit}, data) {
@@ -41,7 +41,7 @@ export default {
     },
     mutations: {
         [mutations.ADD_OR_UPDATE_STORED_STAGE](state, value) {
-            if (!state.storedStages.some((item) => {
+            if (!state.stored.some((item) => {
                     if (item.data.id === value.id) {
                         item.data = Object.assign(item.data, value);
                         return true;
@@ -53,41 +53,41 @@ export default {
                     cache: {},
                     meta: { state: 'show' },
                 };
-                state.storedStages.push(created);
+                state.stored.push(created);
             }
         },
         [mutations.REMOVE_STORED_STAGE](state, id) {
-            state.storedStages = state.storedStages.filter(function (item) {
+            state.stored = state.stored.filter(function (item) {
                 return item.data.id !== id;
             });
         },
         [mutations.SWITCH_STORED_STAGE_STATE](state, id) {
-            const item = state.storedStages.find((item) => {
+            const item = state.stored.find((item) => {
                 return item.data.id === id;
             });
             item.cache = {};
             item.meta.state = item.meta.state === 'show' ? 'edit' : 'show';
         },
         [mutations.UPDATE_STORED_STAGE_CACHE](state, {id, ...data}) {
-            const item = state.storedStages.find((item) => {
+            const item = state.stored.find((item) => {
                 return item.data.id === id;
             });
             item.cache = data;
         },
         [mutations.ADD_NEW_STAGE](state, data) {
-            state.newStages.push({
+            state.added.push({
                 data: data,
                 cache: {},
                 meta: {state: 'edit'},
             });
         },
         [mutations.REMOVE_NEW_STAGE](state, id) {
-            state.newStages = state.newStages.filter((item) => {
+            state.added = state.added.filter((item) => {
                 return item.data.id !== id;
             })
         },
         [mutations.UPDATE_NEW_STAGE_CACHE](state, {id, ...data}) {
-            const item = state.newStages.find((item) => {
+            const item = state.added.find((item) => {
                 return item.data.id === id;
             });
             item.cache = data;
