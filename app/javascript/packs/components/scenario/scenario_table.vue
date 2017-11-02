@@ -122,9 +122,9 @@
                     this.$store.dispatch(actions.UPDATE_SCENARIO, {id: item.data.id, order: index});
                 }
             },
-            onSwitchStoredScenarioActive(scenario, value) {
+            onSwitchStoredScenarioActive(data, value) {
                 this.$store.dispatch(actions.UPDATE_SCENARIO, {
-                    id: scenario.id,
+                    id: data.id,
                     active: value
                 });
             },

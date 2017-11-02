@@ -9,7 +9,7 @@
                                     @dragEnd='onDragEnd')
         template(slot='thead')
             th.button-column
-            th(style='width: 20%')
+            th(style='width: 10%')
             th(style='width: 20%') Duration
             th
         template(slot='stored-show-row' slot-scope='{ item }')
@@ -25,13 +25,13 @@
                     i.fi-list-thumbnails
             td
             td
-                input(type='number' :value='item.data.duration' @change='onUpdateStoredStageCache(item.data.id, "duration", $event.target.value)')
+                input(type='number' min='1' :value='item.data.duration || 1' @change='onUpdateStoredStageCache(item.data.id, "duration", $event.target.value)')
             td
         template(slot='added-row' slot-scope='{ item }')
             td
             td
             td
-                input(type='number' :value='item.cache.duration' @change='onUpdateNewStageCache(item.data.id, "duration", $event.target.value)')
+                input(type='number' min='1' :value='item.cache.duration || 1' @change='onUpdateNewStageCache(item.data.id, "duration", $event.target.value)')
             td
 
 </template>

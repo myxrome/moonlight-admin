@@ -1,15 +1,19 @@
 <template lang="pug">
-    #stages
+    #stages(v-if='stage && scenario')
         ul.breadcrumbs
             li
                 router-link(to="/") Scenarios
-            li(v-if='scenario')
+            li
                 router-link(:to='"/scenarios/" + scenario.data.id') {{ scenario.data.title }}
-            li.current(v-if='stage') Stage \#{{ stage.data.order + 1 }}
+            li.current Stage \#{{ stage.data.order + 1 }}
+        fieldset.fieldset
+            legend Scenes
+            scene-table(:stage-id='stage.data.id')
 </template>
 
 <script>
     import * as actions from '../../store/action_types'
+    import SceneTable from '../scene/scene_table.vue'
 
     export default {
         computed: {
@@ -19,6 +23,9 @@
             scenario: function() {
                 return this.$store.state.scenarios.stored.find(item => item.data.id === this.stage.data.scenario_id);
             }
+        },
+        components: {
+            SceneTable,
         },
         watch: {
             stage: function () {
