@@ -8,24 +8,27 @@
                                     @removeNewItem='onRemoveNewScene')
         template(slot='thead')
             th.switch-column Example
-            th(style='width: 20%') Sex
+            th(style='width: 15%') Sex
             th Content
         template(slot='stored-show-row' slot-scope='{ item }')
             td
                 value-switcher(:item='item.data' :value='item.data.example' @switch='onSwitchStoredSceneExample')
-            td {{ item.data.sex }}
+            td {{ LITERAL_SEX.get(item.data.sex) }}
             td {{ item.data.content }}
         template(slot='stored-edit-row' slot-scope='{ item }')
             td
                 value-switcher(:item='item.data' :value='item.data.example' @switch='onSwitchStoredSceneExample')
             td
-                input(type='number' :value='item.data.sex' @change='onUpdateStoredSceneCache(item.data.id, "sex", $event.target.value)')    
+                select(@change='onUpdateStoredSceneCache(item.data.id, "sex", $event.target.value)')
+                    option(v-for='sex in SEX' :value='sex' :selected='item.data.sex === sex') {{ LITERAL_SEX.get(sex) }}
             td
                 textarea(type='text' rows='1' :value='item.data.content' @change='onUpdateStoredSceneCache(item.data.id, "content", $event.target.value)')
         template(slot='added-row' slot-scope='{ item }')
             td
             td
-                input(type='number' :value='item.data.sex' @change='onUpdateNewSceneCache(item.data.id, "sex", $event.target.value)')    
+                label
+                    select(@change='onUpdateNewSceneCache(item.data.id, "sex", $event.target.value)')
+                        option(v-for='sex in SEX' :value='sex' :selected='0 === sex') {{ LITERAL_SEX.get(sex) }}
             td
                 textarea(type='text' rows='1' :value='item.data.content' @change='onUpdateNewSceneCache(item.data.id, "content", $event.target.value)')
 
@@ -39,6 +42,12 @@
     import ValueSwitcher from '../common/value_switcher.vue'
 
     export default {
+        data: function () {
+            return {
+                SEX: [0, 1, 2],
+                LITERAL_SEX: new Map([[0, 'ANY'], [1, 'M'], [2, 'W']]),
+            }
+        },
         props: {
             stageId: {
                 type: Number,
