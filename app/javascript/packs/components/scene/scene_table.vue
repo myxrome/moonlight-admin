@@ -8,29 +8,20 @@
                                     @removeNewItem='onRemoveNewScene')
         template(slot='thead')
             th.switch-column Example
-            th(style='width: 15%') Sex
             th Content
         template(slot='stored-show-row' slot-scope='{ item }')
             td
                 value-switcher(:item='item.data' :value='item.data.example' @switch='onSwitchStoredSceneExample')
-            td {{ LITERAL_SEX.get(item.data.sex) }}
             td {{ item.data.content }}
         template(slot='stored-edit-row' slot-scope='{ item }')
             td
                 value-switcher(:item='item.data' :value='item.data.example' @switch='onSwitchStoredSceneExample')
             td
-                select(@change='onUpdateStoredSceneCache(item.data.id, "sex", $event.target.value)')
-                    option(v-for='sex in SEX' :value='sex' :selected='item.data.sex === sex') {{ LITERAL_SEX.get(sex) }}
-            td
-                textarea(type='text' rows='1' :value='item.data.content' @change='onUpdateStoredSceneCache(item.data.id, "content", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.cache.content || item.data.content' @change='onUpdateStoredSceneCache(item.data.id, "content", $event.target.value)')
         template(slot='added-row' slot-scope='{ item }')
             td
             td
-                label
-                    select(@change='onUpdateNewSceneCache(item.data.id, "sex", $event.target.value)')
-                        option(v-for='sex in SEX' :value='sex' :selected='0 === sex') {{ LITERAL_SEX.get(sex) }}
-            td
-                textarea(type='text' rows='1' :value='item.data.content' @change='onUpdateNewSceneCache(item.data.id, "content", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.cache.content || item.data.content' @change='onUpdateNewSceneCache(item.data.id, "content", $event.target.value)')
 
 </template>
 
@@ -42,12 +33,6 @@
     import ValueSwitcher from '../common/value_switcher.vue'
 
     export default {
-        data: function () {
-            return {
-                SEX: [0, 1, 2],
-                LITERAL_SEX: new Map([[0, 'ANY'], [1, 'M'], [2, 'W']]),
-            }
-        },
         props: {
             stageId: {
                 type: Number,
@@ -96,7 +81,7 @@
             onSaveNewScene(id) {
                 const item = this.added.find(item => item.data.id === id);
                 this.$store.dispatch(actions.CREATE_SCENE,
-                    Object.assign({stage_id: this.stageId}, item.cache)).then(() => {
+                    Object.assign(item.data, item.cache)).then(() => {
                     this.$store.commit(mutations.REMOVE_NEW_SCENE, id);
                 });
             },

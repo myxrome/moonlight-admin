@@ -30,16 +30,16 @@
             td
                 value-switcher(:item='item.data' :value='item.data.active' @switch='onSwitchStoredScenarioActive')
             td
-                input(type='text' :value='item.data.title' @change='onUpdateStoredScenarioCache(item.data.id, "title", $event.target.value)')
+                input(type='text' :value='item.cache.title || item.data.title' @change='onUpdateStoredScenarioCache(item.data.id, "title", $event.target.value)')
             td
-                textarea(type='text' rows='1' :value='item.data.description' @change='onUpdateStoredScenarioCache(item.data.id, "description", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.cache.descripton || item.data.description' @change='onUpdateStoredScenarioCache(item.data.id, "description", $event.target.value)')
         template(slot='added-row' slot-scope='{ item }')
             td
             td
             td
-                input(type='text' :value='item.cache.title' @change='onUpdateNewScenarioCache(item.data.id, "title", $event.target.value)')
+                input(type='text' :value='item.cache.title || item.data.title' @change='onUpdateNewScenarioCache(item.data.id, "title", $event.target.value)')
             td
-                textarea(type='text' rows='1' :value='item.cache.description' @change='onUpdateNewScenarioCache(item.data.id, "description", $event.target.value)')
+                textarea(type='text' rows='1' :value='item.cache.description || item.data.description' @change='onUpdateNewScenarioCache(item.data.id, "description", $event.target.value)')
 </template>
 
 <script>
@@ -95,15 +95,13 @@
             onAddNewScenario() {
                 this.$store.commit(mutations.ADD_NEW_SCENARIO, {
                     id: -Math.floor(Math.random() * 1000000 + 1),
-                    title: '',
-                    description: '',
                     active: false,
                 });
             },
             onSaveNewScenario(id) {
                 const item = this.added.find(item => item.data.id === id);
                 this.$store.dispatch(actions.CREATE_SCENARIO,
-                    Object.assign({order: this.stored.length, active: false}, item.cache)).then(() => {
+                    Object.assign({order: this.stored.length}, item.data, item.cache)).then(() => {
                     this.$store.commit(mutations.REMOVE_NEW_SCENARIO, id);
                 });
             },

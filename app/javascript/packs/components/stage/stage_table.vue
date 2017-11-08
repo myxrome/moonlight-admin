@@ -25,13 +25,13 @@
                     i.fi-list-thumbnails
             td
             td
-                input(type='number' min='1' :value='item.data.duration || 1' @change='onUpdateStoredStageCache(item.data.id, "duration", $event.target.value)')
+                input(type='number' min='1' :value='item.data.cache || item.data.duration' @change='onUpdateStoredStageCache(item.data.id, "duration", $event.target.value)')
             td
         template(slot='added-row' slot-scope='{ item }')
             td
             td
             td
-                input(type='number' min='1' :value='item.cache.duration || 1' @change='onUpdateNewStageCache(item.data.id, "duration", $event.target.value)')
+                input(type='number' min='1' :value='item.data.cache || item.cache.duration' @change='onUpdateNewStageCache(item.data.id, "duration", $event.target.value)')
             td
 
 </template>
@@ -96,13 +96,13 @@
                 this.$store.commit(mutations.ADD_NEW_STAGE, {
                     id: -Math.floor(Math.random() * 1000000 + 1),
                     scenario_id: this.scenarioId,
-                    duration: 0,
+                    duration: 1,
                 });
             },
             onSaveNewStage(id) {
                 const item = this.added.find(item => item.data.id === id);
                 this.$store.dispatch(actions.CREATE_STAGE,
-                    Object.assign({order: this.stored.length, scenario_id: this.scenarioId}, item.cache)).then(() => {
+                    Object.assign({order: this.stored.length}, item.data, item.cache)).then(() => {
                     this.$store.commit(mutations.REMOVE_NEW_STAGE, id);
                 });
             },

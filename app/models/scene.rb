@@ -1,7 +1,7 @@
 class Scene < ActiveModelSerializers::Model
   include Her::Model
 
-  attributes :content, :sex, :example
+  attributes :content, :example
   belongs_to :stage
 
   parse_root_in_json true, format: :active_model_serializers
