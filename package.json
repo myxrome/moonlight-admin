@@ -4,7 +4,7 @@
   "dependencies": {
     "@rails/webpacker": "^3.0.1",
     "axios": "^0.16.2",
-    "pug": "^2.0.0-rc.4",
+    "pug": "^3.0.1",
     "vue": "^2.4.4",
     "vue-loader": "^13.0.5",
     "vue-router": "^3.0.1",
